@@ -5,9 +5,9 @@ import jwt from 'jsonwebtoken';
 
 export const registerController = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-    if (!username || !email || !password) {
+    if (!name || !email || !password) {
       return res.status(400).json({ success: false, message: 'Please Provide All Fields' });
     }
 
@@ -20,13 +20,13 @@ export const registerController = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = await prisma.user.create({
-      data: { username, email, password: hashedPassword },
+      data: { name, email, password: hashedPassword },
     });
 
     return res.status(201).json({
       success: true,
       message: 'User Registered Successfully',
-      user: { id: newUser.id, username: newUser.username, email: newUser.email },
+      user: { id: newUser.id, name: newUser.name, email: newUser.email },
     });
   } catch (error) {
     console.error(error);
@@ -54,7 +54,7 @@ export const loginController = async (req, res) => {
       success: true,
       message: 'Login Successful',
       token,
-      user: { id: user.id, username: user.username, email: user.email },
+      user: { id: user.id, name: user.name, email: user.email },
     });
   } catch (error) {
     console.error(error);

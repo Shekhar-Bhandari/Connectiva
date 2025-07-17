@@ -1,7 +1,10 @@
-import prisma from '../models/prisma.js';
+import prisma from '../lib/prisma.js';
+
 
 export const createProfile = async (req, res) => {
-  const { fullName, bio, number, address, userId } = req.body;
+  const { fullName, bio, number, address } = req.body;
+  const userId = req.body.id;  
+
   try {
     const profile = await prisma.profile.create({
       data: {
@@ -9,7 +12,7 @@ export const createProfile = async (req, res) => {
         bio,
         number,
         address,
-        user: { connect: { id: parseInt(userId) } },
+        userId,  
       },
     });
     res.status(201).json({ message: 'Profile created', profile });
@@ -17,11 +20,11 @@ export const createProfile = async (req, res) => {
     res.status(500).json({ message: 'Profile creation failed', error: err.message });
   }
 };
-
 export const getProfile = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.body.id; 
+
   try {
-    const profile = await prisma.profile.findUnique({ where: { userId: parseInt(userId) } });
+    const profile = await prisma.profile.findUnique({ where: { userId } });
     if (!profile) return res.status(404).json({ message: 'Profile not found' });
     res.json({ profile });
   } catch (err) {

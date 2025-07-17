@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 export default async function authMiddleware(req, res, next) {
   try {
-    // Get token from Authorization header 
+    // Getting token from Authorization header 
     const authHeader = req.headers['authorization'];
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -21,7 +21,7 @@ export default async function authMiddleware(req, res, next) {
           message: 'Un-Authorized user',
         });
       } else {
-        req.body.id = decoded.id;
+req.userId = decoded.id;
         next();
       }
     });
