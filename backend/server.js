@@ -3,13 +3,14 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import cors from "cors";
 import colors from "colors";
+import path from "path";
 
 //Routes Imported
 import router from "./routes/userRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import userProfileRoutes from "./routes/userProfileRoutes.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
-
+import postRoutes from "./routes/postRoutes.js";
 
 dotenv.config();
 
@@ -27,6 +28,9 @@ app.use(morgan("dev"));
 app.use("/api/v1/auth", router);
 app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/userProfile', userProfileRoutes);
+app.use("/api/posts", postRoutes);
+//multer
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 const PORT = process.env.PORT || 8000;
